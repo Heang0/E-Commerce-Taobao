@@ -9,6 +9,10 @@ const fsSync = require('fs');
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`✅ Server listening at http://localhost:${port}`);
+});
+
 
 // Ensure 'public/uploads' exists
 const uploadDir = path.join(__dirname, 'public', 'uploads');
