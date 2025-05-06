@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "Black Jersey",
+        "price": 40.0,
+        "image": "images\tshirt-01.jpg",
+        "sizes": [
+            "Small",
+            "Medium",
+            "Large",
+            "X-Large"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "White Tee",
+        "price": 25.0,
+        "image": "images/tee-white.jpg",
+        "sizes": [
+            "Small",
+            "Medium",
+            "Large",
+            "X-Large"
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Logo Hoodie",
+        "price": 45.0,
+        "image": "images/hoodie-logo.jpg",
+        "sizes": [
+            "Small",
+            "Medium",
+            "Large",
+            "X-Large"
+        ]
+    }
+]

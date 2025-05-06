@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+         /* --- General Styles --- */
+         body {
+            font-family: sans-serif;
+            margin: 0;
+            padding-top: 56px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            color: #000;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* --- Navbar Styles (Keep these) --- */
+        .navbar {
+            background-color: #f8f9fa !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand,
+        .nav-link,
+        .form-inline .form-control,
+        .form-inline .btn-outline-success {
+            color: #000 !important;
+        }
+
+        .nav-link:hover,
+        .form-inline .btn-outline-success:hover {
+            color: #555 !important;
+            background-color: #eee;
+            border-color: #ccc;
+        }
+
+        .form-inline .form-control {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            color: #000;
+        }
+
+        .form-inline .btn-outline-success {
+            color: #000;
+            border-color: #ccc;
+        }
+
+        .form-inline .btn-outline-success:hover {
+            background-color: #eee;
+            border-color: #ccc;
+            color: #000;
+        }
+
+        /* --- Order Summary Styles --- */
+        #order-summary {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        #order-summary h4 {
+            color: #000;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details h6 {
+            margin-bottom: 5px;
+            color: #000;
+        }
+
+        .item-details p {
+            margin-bottom: 0;
+            color: #777;
+        }
+
+        .item-price {
+            width: 70px;
+            text-align: right;
+            color: #000;
+            font-weight: bold;
+        }
+
+        #cart-total {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* --- Form Styles --- */
+        .form-label {
+            color: #000;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .btn-primary {
+            background-color: #ededed !important;
+            border-color: #000000 !important;
+            color: #000000 !important;
+            box-shadow: none !important;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            border-color: #000000 !important;
+        }
+
+        .form-text {
+            color: #777;
+            font-size: 0.875em;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875em;
+            margin-top: 0.25rem;
+        }
+
+        /* --- Order Confirmation/Error --- */
+        #order-confirmation-container,
+        #order-error {
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .success-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .order-summary-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: white;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            /* Changed to flex-start */
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .item-image-summary {
+            width: 80px;
+            /* Increased image size */
+            height: 80px;
+            object-fit: cover;
+            margin-right: 15px;
+            /* Increased margin */
+            border-radius: 4px;}
+
+.item-details-summary {
+    flex-grow: 1;
+    margin-right: 10px;
+    min-width: 200px;
+    /* Increased width */
+}
+
+.item-details-summary span {
+    display: block;
+    font-size: 1.1rem;
+    /* Increased font size */
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 5px;
+    /* Added margin */
+}
+
+.item-details-summary p {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.item-price {
+    width: auto;
+    /* Adjusted width */
+    text-align: right;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.1rem;
+    /* Increased font size */
+    align-items: center;
+    text-align: center;
+}
+
+.total-amount {
+    text-align: right;
+    font-weight: bold;
+    margin-top: 25px;
+    /* Increased margin */
+    font-size: 1.2rem;
+    /* Increased font size */
+    align-items: center;
+    text-align: center;
+    color: #000;
+}
+
+.back-to-home-btn {
+    margin-top: 20px;
+}
+
+/* --- QR Code Styles --- */
+#qr-code-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#qr-code-section img {
+    max-width: 200px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* --- Checkout Form Styles --- */
+#checkout-form-container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+#checkout-form-container h4 {
+    color: #000;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+#checkout-form .btn-primary {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* --- Responsive adjustments --- */
+@media (max-width: 576px) {
+    .order-item {
+        flex-direction: column;
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    .item-price {
+        margin-top: 15px;
+    }
+
+    .order-summary-box {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .item-image-summary {
+        margin-bottom: 10px;
+    }
+}
+</style>
+</head>
+
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+<div class="container-fluid">
+    <a class="navbar-brand" href="index.html">StarBoii</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="products.html">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="checkout.html" aria-current="page">Cart (<span
+                        id="cart-item-count">0</span>)</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="contact.html">Contact Us</a>
+            </li>
+        </ul>
+        <form class="d-flex form-inline">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+</nav>
+
+<div class="container mt-5">
+<div class="row">
+    <div class="col-md-6 order-md-2 mb-4">
+        <div id="order-summary">
+            <h4>Order Summary</h4>
+            <ul class="list-unstyled" id="cart-items-list">
+            </ul>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <div>
+                    Subtotal:
+                </div>
+                <div id="cart-subtotal">$0.00</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    Shipping:
+                </div>
+                <div id="cart-shipping">Free</div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <h5>Total:</h5>
+                <h5 id="cart-total">$0.00</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 order-md-1">
+        <div id="checkout-form-container">
+            <h4>Billing Address</h4>
+            <form id="checkout-form" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="customerName" name="customerName" required>
+                    <div class="invalid-feedback">Please enter your full name.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="customerEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                    <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="customerAddress" class="form-label">Address</label>
+                    <textarea class="form-control" id="customerAddress" name="customerAddress" rows="3"
+                        required></textarea>
+                    <div class="invalid-feedback">Please enter your address.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="customerPhone" class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" id="customerPhone" name="customerPhone" required>
+                    <div class="invalid-feedback">Please enter your phone number.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="paymentScreenshot" class="form-label">Payment Proof</label>
+                    <input type="file" class="form-control" id="paymentScreenshot" name="paymentScreenshot" required
+                        accept="image/*" required>
+                    <small class="form-text text-muted">Please upload an image of your payment proof
+                        (e.g., screenshot, receipt). Maximum file size: 2MB.</small>
+                    <div class="invalid-feedback">Please upload your payment proof.</div>
+                </div>
+
+                <div id="qr-code-section">
+                    <img src="images/ABA.jpg" alt="Bank QR Code">
+                    <p>Scan this QR code to make your payment.</p>
+                    <p>Bank Name: <span style="font-weight: bold;">HAK CHHAIHEANG</span></p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="order-confirmation-container" class="success-container d-none">
+    <div class="success-icon">✓</div>
+    <h3>Thank you for your purchase</h3>
+    <p>We've received your order and will ship it in 5-7 business days.</p>
+    <p>Your order number is: <strong id="order-id-display"></strong></p>
+
+    <div class="order-summary-box">
+        <h4 style="align-items: center;
+    text-align: center;">Order Details</h4>
+        <div id="confirmation-cart-items">
+        </div>
+        <div class="total-amount">
+            Total: <span id="confirmation-total-amount"></span>
+        </div>
+    </div>
+    <br>
+    <a href="/" class="btn btn-outline-dark">Back to Home</a>
+</div>
+<div id="order-error" class="mt-3 alert alert-danger" style="display:none;">
+    Error placing order. Please try again.
+</div>
+</div>
+
+<footer class="mt-5 bg-light text-center py-3">
+<p>&copy; 2025 Your
+    E-commerce Store</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const cartItemsList = document.getElementById('cart-items-list');
+    const cartTotalDiv = document.getElementById('cart-total');
+    const cartSubtotalDiv = document.getElementById('cart-subtotal');
+    const cartShippingDiv = document.getElementById('cart-shipping');
+    let totalAmount = 0;
+    let subtotal = 0;
+
+    function updateCartDisplay() {
+        const cartData = localStorage.getItem('cart');
+        totalAmount = 0;
+        subtotal = 0;
+
+        if (cartData) {
+            const cart = JSON.parse(cartData);
+            if (cart && cart.length > 0) {
+                let cartHTML = '';
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    totalAmount += itemTotal;
+                    subtotal += itemTotal;
+
+                    cartHTML += `
+                        <li class="cart-item">
+                            <img src="${item.image || 'placeholder.jpg'}" alt="${item.name}" class="item-image">
+                            <div class="item-details">
+                                <h6>${item.name}${item.size ? ` (Size: ${item.size})` : ''}</h6>
+                                <p class="text-muted">Quantity: ${item.quantity}</p>
+                            </div>
+                            <span class="item-price">$${item.price.toFixed(2)}</span>
+                        </li>
+                    `;
+                });
+                cartItemsList.innerHTML = cartHTML;
+                cartTotalDiv.textContent = `$${totalAmount.toFixed(2)}`;
+                cartSubtotalDiv.textContent = `$${subtotal.toFixed(2)}`;
+                cartShippingDiv.textContent = 'Free';
+            } else {
+                cartItemsList.innerHTML = '<li class="text-center">Your cart is empty.</li>';
+                cartTotalDiv.textContent = '$0.00';
+                cartSubtotalDiv.textContent = '$0.00';
+                cartShippingDiv.textContent = 'Free';
+            }
+        } else {
+            cartItemsList.innerHTML = '<li class="text-center">No cart data found.</li>';
+            cartTotalDiv.textContent = '$0.00';
+            cartSubtotalDiv.textContent = '$0.00';
+            cartShippingDiv.textContent = 'Free';
+        }
+        const cartItemCountSpan = document.getElementById('cart-item-count');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cartItemCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    updateCartDisplay();
+
+    const checkoutForm = document.getElementById('checkout-form');
+    const orderConfirmationContainer = document.getElementById('order-confirmation-container');
+    const checkoutFormContainer = document.getElementById('checkout-form-container');
+    const orderErrorDiv = document.getElementById('order-error');
+    const orderIdDisplay = document.getElementById('order-id-display');
+    const confirmationCartItems = document.getElementById('confirmation-cart-items');
+    const confirmationTotalAmount = document.getElementById('confirmation-total-amount');
+
+    checkoutForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (checkoutForm.checkValidity()) {
+            // Prepare order data for sending to the server
+            const orderData = {
+                customerName: document.getElementById('customerName').value,
+                customerEmail: document.getElementById('customerEmail').value,
+                customerAddress: document.getElementById('customerAddress').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                totalAmount: totalAmount, // From the cart summary
+                items: JSON.parse(localStorage.getItem('cart') || '[]').map(item => ({
+                    productId: item.id, // Assuming your cart items have an 'id'
+                    quantity: item.quantity,
+                    size: item.size || null
+                }))
+            };
+
+            const formData = new FormData();
+            formData.append('paymentScreenshot', document.getElementById('paymentScreenshot').files[0]);
+            formData.append('orderData', JSON.stringify(orderData));
+
+            // Send data to the server
+            fetch('/api/orders', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        orderErrorDiv.textContent = data.error;
+                        orderErrorDiv.style.display = 'block';
+                        orderConfirmationContainer.classList.add('d-none');
+                    } else {
+                        orderIdDisplay.textContent = data.orderId;
+                        // Display order summary in confirmation
+                        let orderSummaryHTML = '';
+                        JSON.parse(localStorage.getItem('cart') || '[]').forEach(item => {
+                            const itemTotal = item.price * item.quantity;
+                            orderSummaryHTML += `
+                                <div class="order-item">
+                                    <img src="${item.image ||
+                                    'placeholder.jpg'}" alt="${item.name}" class="item-image-summary">
+                                    <div class="item-details-summary">
+                                        <span>${item.name} ${item.size ? `(Size: ${item.size})` : ''}</span>
+                                        <p class="text-muted">Qty: ${item.quantity} x $${item.price.toFixed(2)}</p>
+                                    </div>
+                                    <span>$${itemTotal.toFixed(2)}</span>
+                                </div>
+                            `;
+                        });
+                        confirmationCartItems.innerHTML = orderSummaryHTML;
+                        confirmationTotalAmount.textContent = `$${totalAmount.toFixed(2)}`;
+
+                        checkoutFormContainer.classList.add('d-none');
+                        orderConfirmationContainer.classList.remove('d-none');
+                        orderErrorDiv.style.display = 'none';
+
+                        // Clear the cart after successful submission
+                        localStorage.removeItem('cart');
+                        document.getElementById('cart-item-count').textContent = '0';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    orderErrorDiv.textContent = 'Error placing order. Please try again.';
+                    orderErrorDiv.style.display = 'block';
+                    orderConfirmationContainer.classList.add('d-none');
+                });
+
+
+        } else {
+            event.stopPropagation();
+        }
+        checkoutForm.classList.add('was-validated');
+    });
+});
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const qrImage = document.getElementById('qrImage');
+    const payButton = document.getElementById('payButton');
+    const checkoutForm = document.getElementById('checkoutForm');
+    const paymentSection = document.getElementById('paymentSection');
+    const qrCodeSection = document.getElementById('qrCodeSection');
+
+    payButton.addEventListener('click', function () {
+      const phone = document.getElementById('phone').value;
+      if (!phone) {
+        alert('Please enter your phone number to proceed with payment.');
+        return;
+      }
+
+      // Simulate QR Code generation
+      qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=PromptPay-' + phone;
+      qrCodeSection.classList.remove('hidden');
+    });
+
+    checkoutForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(checkoutForm);
+      const orderData = {
+        name: formData.get('name'),
+        address: formData.get('address'),
+        phone: formData.get('phone'),
+        items: JSON.parse(localStorage.getItem('cart') || '[]'),
+      };
+
+      try {
+        const response = await fetch('http://localhost:3000/submit-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+        });
+
+        if (response.ok) {
+          alert('Order submitted successfully!');
+          localStorage.removeItem('cart');
+          window.location.href = 'order-success.html';
+        } else {
+          alert('Failed to submit order.');
+        }
+      } catch (error) {
+        console.error('Error submitting order:', error);
+        alert('An error occurred while submitting your order.');
+      }
+    });
+  });
+</script>
+
+</body>
+
+</html>

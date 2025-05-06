@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* --- General Styles --- */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding-top: 56px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            color: #000;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* --- Navbar Styles (Keep these) --- */
+        .navbar {
+            background-color: #f8f9fa !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand,
+        .nav-link,
+        .form-inline .form-control,
+        .form-inline .btn-outline-dark {
+            color: #000 !important;
+        }
+
+        .nav-link:hover,
+        .form-inline .btn-outline-dark:hover {
+            color: #555 !important;
+            background-color: #eee;
+            border-color: #ccc;
+        }
+
+        /* --- Product Grid Styles --- */
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, opacity 0.5s ease 0.2s;
+            opacity: 0;
+        }
+
+        .product-card.fade-in {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+        }
+
+        .product-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .add-to-cart-btn {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #333;
+        }
+
+        /* --- Cart Styles (Keep these) --- */
+        #cart-items {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cart-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        #checkout-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 350px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+            z-index: 1050;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-header {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-footer {
+            border-top: 1px solid #ddd;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            margin-right: 1rem;
+            border-radius: 4px;
+        }
+
+        .cart-item-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .remove-btn,
+        .qty-btn,
+        .continue-shopping {
+            cursor: pointer;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            #product-list {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .product-name {
+                font-size: 1rem;
+            }
+
+            .product-price {
+                font-size: 0.9rem;
+            }
+
+            .add-to-cart-btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #product-list {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="index.html">StarBoii</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart (<span id="cart-item-count">0</span>)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" id="globalSearchForm">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Our Products</h2>
+        <div id="product-list" class="row">
+            </div>
+    </div>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header d-flex justify-content-between align-items-center p-3">
+            <strong>Your Cart - <span id="drawer-cart-count">0</span></strong>
+            <button class="close-cart btn btn-link text-dark font-weight-bold">&times;</button>
+        </div>
+        <div id="drawer-cart-items" class="cart-body px-3"></div>
+        <div class="cart-footer p-3">
+            <p><strong>Estimated total:</strong> $<span id="drawer-cart-total">0.00</span></p>
+            <button class="btn btn-block btn-dark mb-2 checkout-btn">Checkout</button>
+            <button class="btn btn-link btn-sm text-muted continue-shopping">Continue Shopping</button>
+        </div>
+    </div>
+
+    <footer class="mt-5 bg-light text-center py-3">
+        <p>&copy; 2025 Your E-commerce Store</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartDisplay();
+            setupCartDrawerEvents();
+
+            const productListDiv = document.getElementById('product-list');
+            let allProducts = [];
+
+            // Function to get URL parameters
+            function getQueryParam(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            }
+
+            function isElementInViewport(el) {
+                const rect = el.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                );
+            }
+
+            function checkFadeIn() {
+                const productCards = document.querySelectorAll('.product-card');
+                productCards.forEach(card => {
+                    if (isElementInViewport(card)) {
+                        card.classList.add('fade-in');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', checkFadeIn);
+            window.addEventListener('resize', checkFadeIn);
+
+            function renderProducts(products) {
+                productListDiv.innerHTML = '';
+                products.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+
+                    const imageContainer = document.createElement('div');
+                    imageContainer.classList.add('product-image-container');
+                    const img = document.createElement('img');
+                    img.src = product.image_url || 'https://via.placeholder.com/200x200?text=No+Image';
+                    img.alt = product.name;
+                    img.classList.add('product-image');
+                    imageContainer.appendChild(img);
+
+                    const infoDiv = document.createElement('div');
+                    infoDiv.classList.add('product-info');
+                    const name = document.createElement('h3');
+                    name.textContent = product.name;
+                    name.classList.add('product-name');
+                    const price = document.createElement('p');
+                    price.textContent = `$${product.price.toFixed(2)}`;
+                    price.classList.add('product-price');
+                    const addToCartBtn = document.createElement('button');
+                    addToCartBtn.textContent = 'Add to Cart';
+                    addToCartBtn.classList.add('add-to-cart-btn');
+                    addToCartBtn.addEventListener('click', (event) => {
+                        event.stopPropagation();
+                        addItemToCart(product.id, product.name, product.price, product.size, product.image_url);
+                    });
+
+                    productCard.appendChild(imageContainer);
+                    productCard.appendChild(infoDiv);
+                    infoDiv.appendChild(name);
+                    infoDiv.appendChild(price);
+                    infoDiv.appendChild(addToCartBtn);
+
+                    productCard.addEventListener('click', () => {
+                        window.location.href = `product-detail.html?id=${product.id}`;
+                    });
+
+                    productListDiv.appendChild(productCard);
+                });
+                checkFadeIn();
+            }
+
+            function fetchProducts(searchQuery = null) {
+                let apiUrl = '/api/products';
+                if (searchQuery) {
+                    apiUrl += `?search=${searchQuery}`;
+                }
+
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(products => {
+                        allProducts = products;
+                        const filteredProducts = searchQuery
+                            ? products.filter(product =>
+                                product.name.toLowerCase().includes(searchQuery.toLowerCase())
+                            )
+                            : products;
+                        renderProducts(filteredProducts);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                        productListDiv.innerHTML = '<p class="text-danger">Failed to load products.</p>';
+                    });
+            }
+
+            const initialSearchQuery = getQueryParam('search');
+            fetchProducts(initialSearchQuery);
+        });
+    </script>
+</body>
+
+</html>

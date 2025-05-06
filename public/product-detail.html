@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            padding-top: 40px;
+        }
+
+        #product-image {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.5s ease;
+            border-radius: 8px;
+        }
+
+        #product-image:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-black {
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+
+        .btn-black:hover {
+            background-color: #333;
+        }
+
+        #size-select {
+            background-color: black;
+            color: white;
+            font-size: 1rem;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            max-width: 120px;
+        }
+
+        .size-buttons button {
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: black;
+            transition: all 0.3s ease;
+        }
+
+        .size-buttons button:hover {
+            border-color: black;
+            background-color: lightgray;
+            color: black;
+        }
+
+        .size-buttons button.selected {
+            border-color: black !important;
+            background-color: lightgray !important;
+        }
+
+        .button-container { /* Added this container */
+            display: flex;
+            gap: 10px; /* Adjust spacing as needed */
+            margin-top: 20px; /* Add some space above the buttons */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="index.html">StarBoii</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart (<span id="cart-item-count">0</span>)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+            <form class="d-flex form-inline">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-dark" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img id="product-image" src="" alt="Product Image" class="img-fluid" />
+            </div>
+            <div class="col-md-6">
+                <h2 id="product-name">Product Name</h2>
+                <p id="product-description">Product Description</p>
+                <p class="font-weight-bold">Price: $<span id="product-price"></span></p>
+
+                <div class="form-group">
+                    <label for="size-select">Select Size:</label><br>
+                    <div class="size-buttons">
+                        <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size="S">S</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size="M">M</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size="L">L</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size="XL">XL</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm size-option" data-size="XXL">XXL</button>
+                    </div>
+                    <input type="hidden" id="selected-size" name="size" value="">
+                </div>
+                <div class="button-container">
+                    <button id="add-to-cart-btn" class="btn btn-outline-dark">Add to Cart</button>
+                    <button id="continue-shopping-btn" class="btn btn-outline-dark">Continue Shopping</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header d-flex justify-content-between align-items-center p-3">
+            <strong>Your Cart - <span id="drawer-cart-count">0</span></strong>
+            <button class="close-cart btn btn-link text-dark font-weight-bold">&times;</button>
+        </div>
+        <div id="drawer-cart-items" class="cart-body px-3"></div>
+        <div class="cart-footer p-3">
+            <p><strong>Estimated total:</strong> $<span id="drawer-cart-total">0.00</span></p>
+            <button class="btn btn-block btn-dark mb-2">Checkout</button>
+            <button class="btn btn-link btn-sm text-muted continue-shopping">Continue Shopping</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script src="product.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof updateCartDisplay === 'function') {
+                updateCartDisplay();
+            }
+            if (typeof setupCartDrawerEvents === 'function') {
+                setupCartDrawerEvents();
+            }
+
+            const addToCartButton = document.getElementById('add-to-cart-btn');
+            const continueShoppingButton = document.getElementById('continue-shopping-btn');
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const selectedSizeInput = document.getElementById('selected-size');
+            let currentSelectedSize = '';
+
+            sizeOptions.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove 'selected' class from all buttons
+                    sizeOptions.forEach(btn => btn.classList.remove('selected'));
+                    // Add 'selected' class to the clicked button
+                    this.classList.add('selected');
+                    currentSelectedSize = this.dataset.size;
+                    selectedSizeInput.value = currentSelectedSize; // Update the hidden input
+                    console.log('Selected size:', currentSelectedSize);
+                });
+            });
+
+            if (addToCartButton) {
+                addToCartButton.addEventListener('click', () => {
+                    const productId = parseInt(new URLSearchParams(window.location.search).get('id'));
+                    const productName = document.getElementById('product-name').textContent.trim();
+                    const productPrice = parseFloat(document.getElementById('product-price').textContent.trim());
+                    const productImage = document.getElementById('product-image').src;
+                    const selectedSize = currentSelectedSize; // Get the currently selected size
+
+                    console.log('Adding to cart:', { productId, productName, productPrice, selectedSize, productImage });
+
+                    if (typeof addItemToCart === 'function') {
+                        addItemToCart(productId, productName, productPrice, selectedSize, productImage);
+                    }
+                });
+            }
+
+            if (continueShoppingButton) {
+                continueShoppingButton.addEventListener('click', () => {
+                    window.location.href = 'products.html'; // Or wherever your main products page is
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

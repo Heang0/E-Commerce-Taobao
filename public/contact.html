@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        footer {
+            margin-top: 30px;
+            background-color: #f8f9fa;
+            color: #555;
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .follow-us {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: nowrap; /* Prevent wrapping */
+            justify-content: center;
+            align-items: center; /* Vertically align items */
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
+            width: 100%; /* Take full width */
+        }
+    
+        .follow-us span {
+            white-space: nowrap; /* Prevent text wrapping */
+            margin-right: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+    
+        .follow-us a {
+            color: #000;
+            margin: 5px 10px; /* Adjust spacing */
+            font-size: 1.5rem;
+            flex: 0 0 auto; /* Don't grow, don't shrink, auto width */
+            white-space: nowrap; /* Prevent icon text wrapping */
+        }
+    
+        .follow-us a:hover {
+            color: #333;
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .follow-us a {
+                font-size: 1.2rem; /* Further reduce icon size on very small screens */
+                margin: 5px 5px; /* Reduce spacing on small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="index.html">StarBoii</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="products.html">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart (<span id="cart-item-count">0</span>)</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="contact.html">Contact Us</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" id="globalSearchForm">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header d-flex justify-content-between align-items-center p-3">
+            <strong>Your Cart - <span id="drawer-cart-count">0</span></strong>
+            <button class="close-cart btn btn-link text-dark font-weight-bold">&times;</button>
+        </div>
+        <div id="drawer-cart-items" class="cart-body px-3"></div>
+        <div class="cart-footer p-3">
+            <p><strong>Estimated total:</strong> $<span id="drawer-cart-total">0.00</span></p>
+            <button class="btn btn-block btn-dark mb-2 checkout-btn">Checkout</button>
+            <button class="btn btn-link btn-sm text-muted continue-shopping">Continue Shopping</button>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <h2>Contact Us</h2>
+        <p>Have questions? Reach out to us!</p>
+        <form>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea class="form-control" id="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+        </form>
+    </div>
+    <br>
+    <footer class="mt-5 bg-light text-center py-3">
+        <div class="follow-us">
+            <span>Follow Us:</span>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-tiktok"></i></a>
+        </div>
+        <p>&copy; 2025 Your E-commerce Store</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
